@@ -4,13 +4,18 @@ const PORT = 8080;
 
 app.set("view engine", "ejs");
 
-const urlDatabase = {
+const urlDatabase = { // used to keep track of all the URLs and their shortened forms
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
 app.get("/", (req, res) => {
   res.send("Hello!");
+});
+
+app.get("/urls", (req, res) => {
+  let templateVars = { urls: urlDatabase };
+  res.render("urls_index", templateVars)
 });
 
 app.get("/urls.json", (req, res) => {
