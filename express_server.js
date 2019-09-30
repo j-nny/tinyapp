@@ -47,7 +47,9 @@ app.get("/urls/:shortURL", (req, res) => {
 })
 
 app.post("/urls", (req, res) => {
+  urlDatabase[generateRandomString()] = req.body.longURL;
   console.log(req.body);
+  console.log(urlDatabase);
   res.send("Ok.");
 });
 
