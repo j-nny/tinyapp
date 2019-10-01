@@ -12,14 +12,19 @@ app.use(cookieParser());
 
 app.post('/login/', function (req, res) { //sets the username
   res.cookie("username", req.body.username)
-  res.redirect("/urls/")
+  res.redirect("/urls/");
 })
 
-app.get('/login/', function (req, res) {
+app.get('/login/', function (req, res) { //sets cookie
   let templateVars = {
     username: req.cookies["username"]
   };
   res.render("urls_index", templateVars);
+})
+
+app.get('/logout', function (req, res) {
+  res.clearCookie("username");
+  res.redirect('/urls');
 })
 
 function generateRandomString() { //generates the short URL string
@@ -40,6 +45,7 @@ app.get("/", (req, res) => { // main page
 });
 
 app.get("/urls", (req, res) => { // lists all the existing short URLs saved to the database
+  console.log(req.cookies);
   let templateVars = { urls: urlDatabase, username:req.cookies["username"] };
   res.render("urls_index", templateVars)
 });
