@@ -10,9 +10,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-app.post('/login/', function (req, res) {
+app.post('/login/', function (req, res) { //sets the username
   res.cookie("username", req.body.username)
   res.redirect("/urls/")
+})
+
+app.get('/login/', function (req, res) {
+  let templateVars = {
+    username: req.cookies["username"]
+  };
+  res.render("urls_index", templateVars);
 })
 
 function generateRandomString() { //generates the short URL string
@@ -33,12 +40,13 @@ app.get("/", (req, res) => { // main page
 });
 
 app.get("/urls", (req, res) => { // lists all the existing short URLs saved to the database
-  let templateVars = { urls: urlDatabase };
+  let templateVars = { urls: urlDatabase, username:req.cookies["username"] };
   res.render("urls_index", templateVars)
 });
 
 app.get("/urls/new", (req, res) => { // page creates a new short URL
-  res.render("urls_new")
+  let templateVars = { urls: urlDatabase, username:req.cookies["username"] };
+  res.render("urls_new", templateVars)
 })
 
 app.get("/urls.json", (req, res) => {
@@ -50,7 +58,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => { //page shows the longURL and its short URL (and edit)
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username:req.cookies["username"] };
   res.render("urls_show", templateVars)
 })
 
@@ -70,7 +78,6 @@ app.post("/urls/:shortURL", (req, res) => { // keep the short URL, edit the long
   urlDatabase[req.params.shortURL] = req.body.longURL;
   console.log(req.body.longURL);
   console.log(req.params.shortURL);
-
   res.redirect("/urls");
 });
 
