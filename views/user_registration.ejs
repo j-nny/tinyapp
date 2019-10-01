@@ -7,14 +7,25 @@
     <!-- Bootstrap CSS -->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <title>New URL - TinyApp Example</title>
+    <title>Registration</title>
 
   </head>
 
   <body>
     <header><% include ./partials/_header %></header>
 
-
+    <main style="margin: 1em;">
+      <h3>Register:</h3>
+      <form action="/register" method="POST"> 
+        <div style="margin:1em">
+          <h5 class="input-title">Email:</h5>
+          <input name="email" type="email" placeholder="you@email.com" style="width:300px">
+          <h5 class="input-password">Password:</h5>
+          <input name="password" type="password" placeholder="password" style="width:300px">
+        </div>
+        <button type="submit" class="btn btn-outline-primary" style="margin:1em">Submit</button>
+      </form>
+    </main>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
