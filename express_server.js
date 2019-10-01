@@ -7,6 +7,14 @@ app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
+app.post('/login/', function (req, res) {
+  res.cookie("username", req.body.username)
+  res.redirect("/urls/")
+})
+
 function generateRandomString() { //generates the short URL string
   let randomString = "";
   for (let i = 0; i < 6; i++) {
