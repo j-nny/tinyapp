@@ -66,7 +66,7 @@ app.get('/register', function(req, res) {
   res.render("user_registration", templateVars);
 });
 
-app.post('/login/', function(req, res) {
+app.post('/login', function(req, res) {
   if (!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400).send("Error 400: Please enter an email and password");
   } else if (!validateUser(req.body.email)) {
@@ -103,6 +103,7 @@ app.get("/urls", (req, res) => {
   } else {
     console.log("USERID", req.cookies["user_id"])
     console.log("USERURLS", userURLs(req.cookies["user_id"]))
+    console.log("ALLURLS", urlDatabase);
     res.render("urls_index", templateVars);
   }
 });
@@ -141,7 +142,9 @@ app.post("/urls", (req, res) => {
 
 // redirects from short URL to URL page
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]);
+  console.log("USHORTURL", req.params.shortURL)
+  console.log(urlDatabase[req.params.shortURL].longURL)
+  res.redirect(urlDatabase[req.params.shortURL].longURL);
 });
 
 // keep the short URL, edit the long URL
