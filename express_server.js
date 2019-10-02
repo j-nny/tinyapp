@@ -35,6 +35,16 @@ let validateUser = function(email) {
   } return false;
 };
 
+let userURLs = function(user) {
+  let userDatabase = { }
+  for (let url in urlDatabase) {
+    if (urlDatabase[url].userID === user) {
+      userDatabase[url] = {longURL: urlDatabase[url].longURL, userID: user}
+    }
+  }
+  return userDatabase
+}
+
 //registers the user (handles registration form data)
 app.post('/register', function(req, res) {
   const newUserID = generateID();
@@ -87,18 +97,24 @@ app.get("/", (req, res) => {
 
 // lists all the existing short URLs saved to the database
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
-  res.render("urls_index", templateVars);
+  let templateVars = { urls: userURLs(req.cookies["user_id"]), user: users[req.cookies["user_id"]] };
+  if (templateVars.user === undefined) {
+    res.redirect("/login")
+  } else {
+    console.log("USERID", req.cookies["user_id"])
+    console.log("USERURLS", userURLs(req.cookies["user_id"]))
+    res.render("urls_index", templateVars);
+  }
 });
 
 // renders creates the new short URL page
 app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
-  console.log(templateVars.user);
   if (templateVars.user === undefined) {
     res.redirect("/login")
+  } else {
+    res.render("urls_new", templateVars);
   }
-  res.render("urls_new", templateVars);
 });
 
 app.get("/urls.json", (req, res) => {
@@ -117,12 +133,9 @@ app.get("/urls/:shortURL", (req, res) => {
 
 // adds new short URL to database
 app.post("/urls", (req, res) => {
-  console.log("BEFORE", urlDatabase)
   let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   let newShortURL = generateID();
   urlDatabase[newShortURL] = { longURL: req.body.longURL, userID: templateVars.user.id};
-  console.log("TEMPLATEVARS", templateVars.user.id)
-  console.log("AFTER", urlDatabase)
   res.redirect(`/urls/${newShortURL}`);
 });
 
