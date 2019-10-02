@@ -17,7 +17,16 @@ let users = {
   }
 }
 
-// assesses if the user is present in the database
+//generates the short URL string of 6 chars
+function generateRandomString() {
+  let randomString = "";
+  for (let i = 0; i < 6; i++) {
+    alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    randomString += alphaNum[Math.floor(Math.random() * Math.floor(alphaNum.length))]
+  } return randomString;
+}
+
+// checks if the user is present in the database
 let validateUser = function(email, pass) {
   for (let user in users) {
     console.log(users[user]);
@@ -43,47 +52,37 @@ app.post('/register', function (req, res) {
     users[newUserID] = {id: newUserID, email: req.body.email, password: req.body.password}
     res.cookie("user_id", newUserID)
     res.redirect("/urls", templateVars, users)
-  }
-});
+  }  
+});  
 
 //creates register template
 app.get('/register', function (req, res) {
   let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
   res.render("user_registration", templateVars)
-})
+})  
 
 app.post('/login/', function (req, res) {
-  console.log(req.body);
-  console.log(users);
-  console.log(req.cookies);
   let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
   if(!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400).send("Error 400: Please enter an email and password")
   } else if (!validateUser(req.body.email, req.body.password)) {
     res.status(403).send("Error 403: Email and password are incorrect or do not exist")
   } else {
+    res.cookie("user_id", req.body.email)
     res.redirect("/urls", templateVars, users)
-  }
-})
+  }  
+})  
 
 //renders the user log-in page
 app.get('/login/', function (req, res) {
   let templateVars = { users:req.cookies["user_id"] };
   res.render("user_login", templateVars);
-})
+})  
 
 app.get('/logout', function (req, res) { 
   res.clearCookie("user_id");
   res.redirect('/urls');
-})
-
-function generateRandomString() { //generates the short URL string
-  let randomString = "";
-  for (let i = 0; i < 6; i++) {
-    alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-    randomString += alphaNum[Math.floor(Math.random() * Math.floor(alphaNum.length))]
-  } return randomString;
-}
+})  
 
 const urlDatabase = { // used to keep track of all the URLs and their shortened forms
   "b2xVn2": "http://www.lighthouselabs.ca",

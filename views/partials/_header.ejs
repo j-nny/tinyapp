@@ -11,20 +11,20 @@
       </div>
     </div>
       
-      <% if (users) { %>
-        <form class="form-inline" action="/logout" method="GET" style="margin-right:1em">
-          <label for="user_id" style="margin-right:1em">Logged in as: <%= users %></label>
-          <button type="submit" class="btn btn-dark">Logout</button>
-        </form>
-        <% } else { %>
-          <!-- <form class="form-inline" action="/login/" method="POST">
-            <input name="username" class="form-control" type="text" placeholder="username" style="width:200px; margin-right:1em">
-            <button type="submit" class="btn btn-dark">Submit</button>
-          </form> -->
-          <div class="nav-bar nav-link d-flex justify-content-center"></div>
-            <a class="nav-item nav-link" href="/register/"><button class="btn btn-dark">Register</button></a>
-            <a class="nav-item nav-link" href="/login/"><button class="btn btn-dark">Login</button></a>
-          </div>
-          <% } %>
+    <% if (users) { %>
+      <form class="form-inline" action="/logout" method="GET" style="margin-right:1em">
+        <label for="user_id" style="margin-right:1em">Logged in as: <%= users %></label>
+        <button type="submit" class="btn btn-dark">Logout</button>
+      </form>
+    <% } else { %>
+      <!-- <form class="form-inline" action="/login/" method="POST">
+        <input name="username" class="form-control" type="text" placeholder="username" style="width:200px; margin-right:1em">
+        <button type="submit" class="btn btn-dark">Submit</button>
+      </form> -->
+      <div class="nav-bar nav-link d-flex justify-content-center"></div>
+        <a class="nav-item nav-link" href="/register/"><button class="btn btn-dark">Register</button></a>
+        <a class="nav-item nav-link" href="/login/"><button class="btn btn-dark">Login</button></a>
+      </div>
+    <% } %>
   </nav>
 </header>
