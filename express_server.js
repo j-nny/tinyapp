@@ -50,7 +50,7 @@ app.post('/register', function (req, res) {
     res.send("Already registered")
   } else {
     users[newUserID] = {id: newUserID, email: req.body.email, password: req.body.password}
-    res.cookie("user_id", newUserID)
+    res.cookie("user_id", req.body.email)
     res.redirect("/urls", templateVars, users)
   }  
 });  
@@ -75,7 +75,7 @@ app.post('/login/', function (req, res) {
 
 //renders the user log-in page
 app.get('/login/', function (req, res) {
-  let templateVars = { users:req.cookies["user_id"] };
+  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
   res.render("user_login", templateVars);
 })  
 
