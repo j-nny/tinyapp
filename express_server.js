@@ -94,6 +94,10 @@ app.get("/urls", (req, res) => {
 // page creates a new short URL
 app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
+  console.log(templateVars.user);
+  if (templateVars.user === undefined) {
+    res.redirect("/login")
+  }
   res.render("urls_new", templateVars);
 });
 
