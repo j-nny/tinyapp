@@ -149,14 +149,18 @@ app.get("/u/:shortURL", (req, res) => {
 
 // keep the short URL, edit the long URL
 app.post("/urls/:shortURL", (req, res) => {
-  urlDatabase[req.params.shortURL] = req.body.longURL;
-  res.redirect("/urls");
+  if (user) {
+    urlDatabase[req.params.shortURL] = req.body.longURL;
+    res.redirect("/urls");
+  }
 });
 
 //deletes existing URLs
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
+  if (user) {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect("/urls");
+  }
 });
 
 
