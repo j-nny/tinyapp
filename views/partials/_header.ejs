@@ -14,7 +14,7 @@
     <% if (users) { %>
       <form class="form-inline" action="/logout" method="GET" style="margin-right:1em">
         <label for="user_id" style="margin-right:1em">Logged in as: <%= users %>!</label>
-        <button type="submit" class="btn btn-dark">Logout</button>
+        <button type="submit" class="btn btn-outline-dark">Logout</button>
       </form>
     <% } else { %>
       <!-- <form class="form-inline" action="/login/" method="POST">
@@ -22,8 +22,8 @@
         <button type="submit" class="btn btn-dark">Submit</button>
       </form> -->
       <div class="nav-bar nav-link d-flex justify-content-center"></div>
-        <a class="nav-item nav-link" href="/register/"><button class="btn btn-dark">Register</button></a>
-        <a class="nav-item nav-link" href="/login/"><button class="btn btn-dark">Login</button></a>
+        <a class="nav-item nav-link" href="/register/">Register</a>
+        <a class="nav-item nav-link" href="/login/">Login</a>
       </div>
     <% } %>
   </nav>

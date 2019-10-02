@@ -9,13 +9,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
 //global variable, used to store and access users in the app
-let users = {
-  user: {
-    id: "tempid",
-    email: "fake@email.com",
-    password: "temppass"
-  }
-}
+let users = { }
 
 //generates the short URL string of 6 chars
 function generateRandomString() {
@@ -27,14 +21,11 @@ function generateRandomString() {
 }
 
 // checks if the user is present in the database
-let validateUser = function(email, pass) {
+function validateUser(email, pass) {
   for (let user in users) {
     console.log(users[user]);
     if (users[user].email === email && users[user].password === pass) {
-      // res.cookie('user_id', user);
-      // req.session.user_id = user;
-      // break;
-      return true;
+      return users[user].id;
     }
   } return false;
 }
@@ -50,7 +41,7 @@ app.post('/register', function (req, res) {
     res.send("Already registered")
   } else {
     users[newUserID] = {id: newUserID, email: req.body.email, password: req.body.password}
-    res.cookie("user_id", req.body.email)
+    res.cookie("user_id", newUserID)
     res.redirect("/urls", templateVars, users)
   }  
 });  
@@ -68,7 +59,8 @@ app.post('/login/', function (req, res) {
   } else if (!validateUser(req.body.email, req.body.password)) {
     res.status(403).send("Error 403: Email and password are incorrect or do not exist")
   } else {
-    res.cookie("user_id", req.body.email)
+    console.log(users)
+    res.cookie("user_id", validateUser(req.body.email, req.body.password))
     res.redirect("/urls", templateVars, users)
   }  
 })  
