@@ -11,6 +11,12 @@ app.use(cookieParser());
 //global variable, used to store and access users in the app
 let users = { };
 
+// used to keep track of all the URLs and their shortened forms
+const urlDatabase = {
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "blank" },
+  "9sm5xK": { longURL: "http://www.google.com", userID: "blank" }
+};
+
 //generates the short URL string of 6 chars
 let generateID = function() {
   let randomString = "";
@@ -74,12 +80,6 @@ app.get('/logout', function(req, res) {
   res.redirect('/urls');
 });
 
-// used to keep track of all the URLs and their shortened forms
-const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
-
 // main page
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -91,7 +91,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-// page creates a new short URL
+// renders creates the new short URL page
 app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   console.log(templateVars.user);
@@ -109,17 +109,21 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-//page shows the longURL and its short URL (and edit)
+//renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user:users[req.cookies["user_id"]] };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.cookies["user_id"]] };
   res.render("urls_show", templateVars);
 });
 
 // adds new short URL to database
 app.post("/urls", (req, res) => {
-  let newID = generateID();
-  urlDatabase[newID] = req.body.longURL;
-  res.redirect(`/urls/${newID}`);
+  console.log("BEFORE", urlDatabase)
+  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
+  let newShortURL = generateID();
+  urlDatabase[newShortURL] = { longURL: req.body.longURL, userID: templateVars.user.id};
+  console.log("TEMPLATEVARS", templateVars.user.id)
+  console.log("AFTER", urlDatabase)
+  res.redirect(`/urls/${newShortURL}`);
 });
 
 // redirects from short URL to URL page
