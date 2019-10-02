@@ -21,11 +21,10 @@ function generateRandomString() {
 }
 
 // checks if the user is present in the database
-function validateUser(email, pass) {
+function validateUser(email) {
   for (let user in users) {
-    console.log(users[user]);
-    if (users[user].email === email && users[user].password === pass) {
-      return users[user].id;
+    if (users[user].email === email) {
+        return users[user].id;
     }
   } return false;
 }
@@ -37,12 +36,12 @@ app.post('/register', function (req, res) {
   if(!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400);
     res.send("Error 400: Please enter an email and password")
-  } else if (validateUser(req.body.email, req.body.password)) {
+  } else if (validateUser(req.body.email)) {
     res.send("Already registered")
   } else {
     users[newUserID] = {id: newUserID, email: req.body.email, password: req.body.password}
     res.cookie("user_id", newUserID)
-    res.redirect("/urls", templateVars, users)
+    res.redirect("/urls")
   }  
 });  
 
@@ -56,12 +55,13 @@ app.post('/login/', function (req, res) {
   let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
   if(!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400).send("Error 400: Please enter an email and password")
-  } else if (!validateUser(req.body.email, req.body.password)) {
-    res.status(403).send("Error 403: Email and password are incorrect or do not exist")
+  // } else if (!validateUser(req.body.email)) {
+  //   res.status(403).send("Error 403: Email does not exist")
+  } else if (validateUser(req.body.email) && req.body.password !== users[validateUser(req.body.email)].password) {
+    res.status(403).send("Error 403: Email and password do not match")
   } else {
-    console.log(users)
-    res.cookie("user_id", validateUser(req.body.email, req.body.password))
-    res.redirect("/urls", templateVars, users)
+    res.cookie("user_id", validateUser(req.body.email))
+    res.redirect("/urls")
   }  
 })  
 
@@ -86,7 +86,6 @@ app.get("/", (req, res) => { // main page
 });
 
 app.get("/urls", (req, res) => { // lists all the existing short URLs saved to the database
-  console.log(req.cookies);
   let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
   res.render("urls_index", templateVars)
 });
@@ -112,8 +111,6 @@ app.get("/urls/:shortURL", (req, res) => { //page shows the longURL and its shor
 app.post("/urls", (req, res) => { // adds new short URL to database
   let string = generateRandomString()
   urlDatabase[string] = req.body.longURL;
-  console.log(req.body);
-  console.log(urlDatabase);
   res.redirect(`/urls/${string}`);
 });
 
@@ -123,8 +120,6 @@ app.get("/u/:shortURL", (req, res) => { // redirects from short URL to URL page
 
 app.post("/urls/:shortURL", (req, res) => { // keep the short URL, edit the long URL
   urlDatabase[req.params.shortURL] = req.body.longURL;
-  console.log(req.body.longURL);
-  console.log(req.params.shortURL);
   res.redirect("/urls");
 });
 
