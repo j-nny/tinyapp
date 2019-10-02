@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale-1, shrink-to-fit-no">
 
     <!-- Bootstrap CSS -->
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Registration</title>
 
   </head>
-
   <body>
     <header><% include ./partials/_header %></header>
 
     <main style="margin: 1em;">
       <h3>Register:</h3>
       <form action="/register" method="POST"> 
-        <div style="margin:1em">
+        <div style="margin-top:1em">
           <h5 class="input-title">Email:</h5>
-          <input name="email" type="email" placeholder="you@email.com" style="width:300px">
+          <input name="email" type="email" placeholder="Email" style="width:300px">
           <h5 class="input-password">Password:</h5>
-          <input name="password" type="password" placeholder="password" style="width:300px">
+          <input name="password" type="password" placeholder="Password" style="width:300px">
         </div>
         <button type="submit" class="btn btn-outline-primary" style="margin:1em">Submit</button>
       </form>
