@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -54,7 +55,7 @@ app.post('/register', function(req, res) {
   } else if (validateUser(req.body.email)) {
     res.send("Already registered");
   } else {
-    users[newUserID] = {id: newUserID, email: req.body.email, password: req.body.password};
+    users[newUserID] = {id: newUserID, email: req.body.email, password: bcrypt.hashSync(req.body.password, 10)};
     res.cookie("user_id", newUserID);
     res.redirect("/urls");
   }
@@ -71,7 +72,8 @@ app.post('/login', function(req, res) {
     res.status(400).send("Error 400: Please enter an email and password");
   } else if (!validateUser(req.body.email)) {
     res.status(403).send("Error 403: Email does not exist");
-  } else if (validateUser(req.body.email) && req.body.password !== users[validateUser(req.body.email)].password) {
+  // } else if (validateUser(req.body.email) && req.body.password !== users[validateUser(req.body.email)].password) {
+  } else if (validateUser(req.body.email) && bcrypt.compareSync(req.body.password, bcrypt.hashSync(users[validateUser(req.body.email)].password, 10))) {
     res.status(403).send("Error 403: Email and password do not match");
   } else {
     res.cookie("user_id", validateUser(req.body.email));
