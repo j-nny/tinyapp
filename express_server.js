@@ -31,7 +31,6 @@ function validateUser(email) {
 
 //registers the user (handles registration form data)
 app.post('/register', function (req, res) {
-  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
   const newUserID = generateRandomString();
   if(!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400);
@@ -47,16 +46,16 @@ app.post('/register', function (req, res) {
 
 //creates register template
 app.get('/register', function (req, res) {
-  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
+  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   res.render("user_registration", templateVars)
-})  
+})
 
 app.post('/login/', function (req, res) {
-  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
+  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   if(!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400).send("Error 400: Please enter an email and password")
-  // } else if (!validateUser(req.body.email)) {
-  //   res.status(403).send("Error 403: Email does not exist")
+  } else if (!validateUser(req.body.email)) {
+    res.status(403).send("Error 403: Email does not exist")
   } else if (validateUser(req.body.email) && req.body.password !== users[validateUser(req.body.email)].password) {
     res.status(403).send("Error 403: Email and password do not match")
   } else {
@@ -67,14 +66,14 @@ app.post('/login/', function (req, res) {
 
 //renders the user log-in page
 app.get('/login/', function (req, res) {
-  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
+  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   res.render("user_login", templateVars);
-})  
+})
 
-app.get('/logout', function (req, res) { 
+app.get('/logout', function (req, res) {
   res.clearCookie("user_id");
   res.redirect('/urls');
-})  
+})
 
 const urlDatabase = { // used to keep track of all the URLs and their shortened forms
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -86,12 +85,12 @@ app.get("/", (req, res) => { // main page
 });
 
 app.get("/urls", (req, res) => { // lists all the existing short URLs saved to the database
-  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
+  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   res.render("urls_index", templateVars)
 });
 
 app.get("/urls/new", (req, res) => { // page creates a new short URL
-  let templateVars = { urls: urlDatabase, users:req.cookies["user_id"] };
+  let templateVars = { urls: urlDatabase, user:users[req.cookies["user_id"]] };
   res.render("urls_new", templateVars)
 })
 
@@ -104,7 +103,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => { //page shows the longURL and its short URL (and edit)
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], users:req.cookies["user_id"] };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user:users[req.cookies["user_id"]] };
   res.render("urls_show", templateVars)
 })
 
