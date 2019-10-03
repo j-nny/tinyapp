@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: "session",
   keys: ["user_id"]
-}))
+}));
 
 //global variable, used to store and access users in the app
 let users = {  };
@@ -42,14 +42,14 @@ let validateUser = function(email) {
 };
 
 let userURLs = function(user) {
-  let userDatabase = { }
+  let userDatabase = { };
   for (let url in urlDatabase) {
     if (urlDatabase[url].userID === user) {
-      userDatabase[url] = {longURL: urlDatabase[url].longURL, userID: user}
+      userDatabase[url] = {longURL: urlDatabase[url].longURL, userID: user};
     }
   }
-  return userDatabase
-}
+  return userDatabase;
+};
 
 //registers the user (handles registration form data)
 app.post('/register', function(req, res) {
@@ -100,9 +100,9 @@ app.get("/logout", function(req, res) {
 app.get("/", (req, res) => {
   let templateVars = { urls: userURLs(req.session.user_id), user: users[req.session.user_id] };
   if (templateVars.user === undefined) {
-    res.redirect("/login")
+    res.redirect("/login");
   } else {
-    res.redirect("/urls")
+    res.redirect("/urls");
   }
 });
 
@@ -110,7 +110,7 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = { urls: userURLs(req.session.user_id), user: users[req.session.user_id] };
   if (templateVars.user === undefined) {
-    res.redirect("/login")
+    res.redirect("/login");
   } else {
     // console.log("USERID", req.cookies["user_id"])
     // console.log("USERURLS", userURLs(req.cookies["user_id"]))
@@ -123,7 +123,7 @@ app.get("/urls", (req, res) => {
 app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
   if (templateVars.user === undefined) {
-    res.redirect("/login")
+    res.redirect("/login");
   } else {
     res.render("urls_new", templateVars);
   }
@@ -140,16 +140,14 @@ app.get("/hello", (req, res) => {
 //renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
   if (users[req.session.user_id] === undefined) {
-    res.status(403).send("Please log in!")
+    res.status(403).send("Please log in!");
   } else if (urlDatabase[req.params.shortURL] === undefined) {
-    res.status(403).send("TinyURL does not exist")
-  } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID ) {
-    console.log("CURRENTUSER", users[req.session.user_id])
-    console.log("SAVEDUSER", urlDatabase[req.params.shortURL].userID)
-    res.status(403).send("Restricted access")
+    res.status(403).send("TinyURL does not exist");
+  } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID) {
+    res.status(403).send("Restricted access");
   } else {
     let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.session.user_id] };
-  res.render("urls_show", templateVars);
+    res.render("urls_show", templateVars);
   }
 });
 
@@ -163,17 +161,13 @@ app.post("/urls", (req, res) => {
 
 // redirects from short URL to URL page
 app.get("/u/:shortURL", (req, res) => {
-  console.log("USHORTURL", req.params.shortURL)
-  console.log(urlDatabase[req.params.shortURL].longURL)
   res.redirect(urlDatabase[req.params.shortURL].longURL);
 });
 
 // keep the short URL, edit the long URL
 app.post("/urls/:shortURL", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
-  console.log("USER", urlDatabase)
   if (templateVars.user) {
-    console.log("USERAFTER", templateVars.user)
     urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect("/urls");
   }
