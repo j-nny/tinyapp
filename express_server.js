@@ -16,8 +16,8 @@ app.use(cookieSession({
 
 // used to keep track of all the URLs and their shortened forms
 const urlDatabase = {
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "blank" },
-  "icon": { longURL: "https://i.pinimg.com/originals/b9/3f/80/b93f8070c4178d1906198e264cb4c98f.png", userID: "blank" }
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "dummy" },
+  "icon": { longURL: "https://i.pinimg.com/originals/b9/3f/80/b93f8070c4178d1906198e264cb4c98f.png", userID: "dummy" }
 };
 
 //global variable, used to store and access users in the app
@@ -85,7 +85,7 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = { urls: userURLs(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (templateVars.user === undefined) {
-    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please <a href='/login'>log in</a>?");
+    res.status(403).send("I can't show you this yet! Please <a href='/login'>log in</a>!");
   } else {
     res.render("urls_index", templateVars);
   }
@@ -112,7 +112,7 @@ app.get("/hello", (req, res) => {
 //renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
   if (users[req.session.user_id] === undefined) {
-    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please <a href='/login'>log in</a>?");
+    res.status(403).send("I can't show you this yet! Please <a href='/login'>log in</a>!");
   } else if (urlDatabase[req.params.shortURL] === undefined) {
     res.status(403).send("This is a little sad... this TinyURL does not exist! <a href='/urls/new'>Create a new one!</a>");
   } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID) {
