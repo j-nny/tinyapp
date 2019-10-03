@@ -15,7 +15,7 @@ app.use(cookieSession({
 }))
 
 //global variable, used to store and access users in the app
-let users = { };
+let users = {  };
 
 // used to keep track of all the URLs and their shortened forms
 const urlDatabase = {
@@ -160,15 +160,19 @@ app.get("/u/:shortURL", (req, res) => {
 
 // keep the short URL, edit the long URL
 app.post("/urls/:shortURL", (req, res) => {
-  if (user) {
-    urlDatabase[req.params.shortURL] = req.body.longURL;
+  let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
+  console.log("USER", urlDatabase)
+  if (templateVars.user) {
+    console.log("USERAFTER", templateVars.user)
+    urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect("/urls");
   }
 });
 
 //deletes existing URLs
 app.post("/urls/:shortURL/delete", (req, res) => {
-  if (user) {
+  let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
+  if (templateVars.user) {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
   }
