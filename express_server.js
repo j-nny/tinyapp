@@ -91,14 +91,19 @@ app.get('/login/', function(req, res) {
   res.render("user_login", templateVars);
 });
 
-app.get('/logout', function(req, res) {
+app.get("/logout", function(req, res) {
   req.session = null;
   res.redirect('/urls');
 });
 
 // main page
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  let templateVars = { urls: userURLs(req.session.user_id), user: users[req.session.user_id] };
+  if (templateVars.user === undefined) {
+    res.redirect("/login")
+  } else {
+    res.redirect("/urls")
+  }
 });
 
 // lists all the existing short URLs saved to the database
