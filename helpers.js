@@ -18,17 +18,17 @@ let getUserByEmail = function(email, users) {
 
 // filters the URLs for only that user
 let userURLs = function(user, urlDatabase) {
-  let userDatabase = { }
+  let userDatabase = { };
   for (let url in urlDatabase) {
     if (urlDatabase[url].userID === user) {
-      userDatabase[url] = {longURL: urlDatabase[url].longURL, userID: user}
+      userDatabase[url] = {longURL: urlDatabase[url].longURL, userID: user};
     }
   }
-  return userDatabase
-}
+  return userDatabase;
+};
 
 module.exports = {
   generateID,
   getUserByEmail,
   userURLs
-}
+};

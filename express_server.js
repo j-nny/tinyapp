@@ -28,7 +28,8 @@ let users = {  };
 //registers the user (handles registration form data)
 app.post("/register", function(req, res) {
   const newUserID = generateID();
-  if (!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
+  if (!req.body.email || !req.body.password) {
+    // errors if fields are empty
     res.status(400).send("Oops! Please enter an email and password :) <a href='/urls/'>Register</a>");
   } else if (getUserByEmail(req.body.email, users)) {
     res.send("Hey! We're already friends, just <a href='/login'>log in! :)</a>");
@@ -46,7 +47,7 @@ app.get('/register', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
-  if (!req.body.email || !req.body.password) { 
+  if (!req.body.email || !req.body.password) {
     // errors if fields are empty
     res.status(400).send("Oops! Please enter an email and password :) <a href='/login'>Login</a>");
   } else if (getUserByEmail(req.body.email, users) === undefined) {
@@ -54,9 +55,7 @@ app.post('/login', function(req, res) {
     res.status(403).send("Looks like we're not friends yet :( This email does not exist, please <a href='/register'>register!</a>");
   } else if (getUserByEmail(req.body.email, users) && !bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
     // errors if user is registered and passwords do not match
-    console.log("REQBODYPASS", bcrypt.hashSync(req.body.password, 10))
-    console.log("USERS", users[getUserByEmail(req.body.email, users)].password)
-    res.status(403).send("Oops! Password and email do not match!<a href='/login'>Login</a>");
+    res.status(403).send("Oops! Password and email do not match! <a href='/login'>Login</a>");
   } else if (getUserByEmail(req.body.email, users) && bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
     req.session.user_id = getUserByEmail(req.body.email, users);
     res.redirect("/urls");
@@ -117,11 +116,11 @@ app.get("/hello", (req, res) => {
 //renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
   if (users[req.session.user_id] === undefined) {
-    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please log in?");
+    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please <a href='/login'>log in</a>?");
   } else if (urlDatabase[req.params.shortURL] === undefined) {
-    res.status(403).send("This is a little sad... this TinyURL does not exist!");
+    res.status(403).send("This is a little sad... this TinyURL does not exist! <a href='/urls/new'>Create a new one!</a>");
   } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID) {
-    res.status(403).send("Looks like this page isn't for you, but you can have your own TinyURL ;)");
+    res.status(403).send("Looks like this page isn't for you, but you can have <a href='/urls/new'>your own TinyURL</a> ;)");
   } else {
     let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.session.user_id] };
     res.render("urls_show", templateVars);
@@ -148,7 +147,7 @@ app.post("/urls/:shortURL", (req, res) => {
     urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect("/urls");
   } else {
-    res.status(403).send("Looks like this page isn't for you, but you can have your own TinyURL ;)");
+    res.status(403).send("Looks like this page isn't for you, but you can have <a href='/urls/new'>your own TinyURL</a> ;)");
   }
 });
 
@@ -159,7 +158,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
   } else {
-    res.status(403).send("Looks like this page isn't for you, but you can have your own TinyURL ;)");
+    res.status(403).send("Looks like this page isn't for you, but you can have <a href='/urls/new'>your own TinyURL</a> ;)");
   }
 });
 
