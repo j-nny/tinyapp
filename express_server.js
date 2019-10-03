@@ -139,10 +139,16 @@ app.get("/hello", (req, res) => {
 
 //renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.session.user_id] };
-  if (templateVars.user === undefined) {
-    res.redirect("/login")
+  if (users[req.session.user_id] === undefined) {
+    res.status(403).send("Please log in!")
+  } else if (urlDatabase[req.params.shortURL] === undefined) {
+    res.status(403).send("TinyURL does not exist")
+  } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID ) {
+    console.log("CURRENTUSER", users[req.session.user_id])
+    console.log("SAVEDUSER", urlDatabase[req.params.shortURL].userID)
+    res.status(403).send("Restricted access")
   } else {
+    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.session.user_id] };
   res.render("urls_show", templateVars);
   }
 });
