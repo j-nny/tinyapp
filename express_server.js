@@ -31,7 +31,7 @@ app.post("/register", function(req, res) {
   if (!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
     res.status(400).send("Oops! Please enter an email and password :) <a href='/urls/'>Register</a>");
   } else if (getUserByEmail(req.body.email, users)) {
-    res.send("Hey! We're already friends, just log in! :)");
+    res.send("Hey! We're already friends, just <a href='/login'>log in! :)</a>");
   } else {
     users[newUserID] = {id: newUserID, email: req.body.email, password: bcrypt.hashSync(req.body.password, 10)};
     req.session.user_id = newUserID;
@@ -46,13 +46,18 @@ app.get('/register', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
-  if (!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
-    res.status(400).send("Oops! Please enter an email and password :)");
-  } else if (!getUserByEmail(req.body.email, users)) {
-    res.status(403).send("Looks like we're not friends yet :( This email does not exist, please register!");
-  } else if (getUserByEmail(req.body.email, users) && bcrypt.compareSync(req.body.password, bcrypt.hashSync(users[getUserByEmail(req.body.email, users)].password, 10))) {
-    res.status(403).send("Oops! Password and email do not match!");
-  } else {
+  if (!req.body.email || !req.body.password) { 
+    // errors if fields are empty
+    res.status(400).send("Oops! Please enter an email and password :) <a href='/login'>Login</a>");
+  } else if (getUserByEmail(req.body.email, users) === undefined) {
+    // errors if user is not registered
+    res.status(403).send("Looks like we're not friends yet :( This email does not exist, please <a href='/register'>register!</a>");
+  } else if (getUserByEmail(req.body.email, users) && !bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
+    // errors if user is registered and passwords do not match
+    console.log("REQBODYPASS", bcrypt.hashSync(req.body.password, 10))
+    console.log("USERS", users[getUserByEmail(req.body.email, users)].password)
+    res.status(403).send("Oops! Password and email do not match!<a href='/login'>Login</a>");
+  } else if (getUserByEmail(req.body.email, users) && bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
     req.session.user_id = getUserByEmail(req.body.email, users);
     res.redirect("/urls");
   }

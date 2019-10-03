@@ -13,7 +13,7 @@ let getUserByEmail = function(email, users) {
     if (users[user].email === email) {
       return users[user].id;
     }
-  } return false;
+  }
 };
 
 // filters the URLs for only that user
