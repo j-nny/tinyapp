@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
+// const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 // helper functions:
@@ -9,6 +10,7 @@ const { generateID, getUserByEmail, userURLs } = require("./helpers.js");
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+// app.use(cookieParser());
 app.use(cookieSession({
   name: "session",
   keys: ["user_id"]
@@ -16,8 +18,8 @@ app.use(cookieSession({
 
 // used to keep track of all the URLs and their shortened forms
 const urlDatabase = {
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "dummy" },
-  "icon": { longURL: "https://i.pinimg.com/originals/b9/3f/80/b93f8070c4178d1906198e264cb4c98f.png", userID: "dummy" }
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "blank" },
+  "9sm5xK": { longURL: "http://www.google.com", userID: "blank" }
 };
 
 //global variable, used to store and access users in the app
@@ -85,7 +87,7 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = { urls: userURLs(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (templateVars.user === undefined) {
-    res.status(403).send("I can't show you this yet! Please <a href='/login'>log in</a>!");
+    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please <a href='/login'>log in</a>?");
   } else {
     res.render("urls_index", templateVars);
   }
@@ -96,6 +98,8 @@ app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
   if (templateVars.user === undefined) {
     res.redirect("/login");
+  // } else if (req.params.longURL === undefined) {
+  //   res.status(403).send("That can't get any tinier! Please enter a URL!");
   } else {
     res.render("urls_new", templateVars);
   }
@@ -106,13 +110,13 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello World</body></html>\n");
+  res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 //renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
   if (users[req.session.user_id] === undefined) {
-    res.status(403).send("I can't show you this yet! Please <a href='/login'>log in</a>!");
+    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please <a href='/login'>log in</a>?");
   } else if (urlDatabase[req.params.shortURL] === undefined) {
     res.status(403).send("This is a little sad... this TinyURL does not exist! <a href='/urls/new'>Create a new one!</a>");
   } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID) {
