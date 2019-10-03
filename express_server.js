@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
-// const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 // helper functions:
@@ -10,7 +9,6 @@ const { generateID, getUserByEmail, userURLs } = require("./helpers.js");
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
-// app.use(cookieParser());
 app.use(cookieSession({
   name: "session",
   keys: ["user_id"]
@@ -98,8 +96,6 @@ app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
   if (templateVars.user === undefined) {
     res.redirect("/login");
-  // } else if (req.params.longURL === undefined) {
-  //   res.status(403).send("That can't get any tinier! Please enter a URL!");
   } else {
     res.render("urls_new", templateVars);
   }
@@ -110,7 +106,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
+  res.send("<html><body>Hello World</body></html>\n");
 });
 
 //renders page showing user's URLs
