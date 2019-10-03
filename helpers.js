@@ -16,6 +16,7 @@ let getUserByEmail = function(email, users) {
   } return false;
 };
 
+// filters the URLs for only that user
 let userURLs = function(user, urlDatabase) {
   let userDatabase = { }
   for (let url in urlDatabase) {

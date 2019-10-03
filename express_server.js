@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 // helper functions:
-const { generateID, getUserByEmail, userURLs } = require("./helper.js");
+const { generateID, getUserByEmail, userURLs } = require("./helpers.js");
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -29,7 +29,7 @@ let users = {  };
 app.post("/register", function(req, res) {
   const newUserID = generateID();
   if (!req.body.email || !req.body.password) { //ensures fields are not empty, else error 400
-    res.status(400).send("Oops! Please enter an email and password :) <a href='/urls/'>test</a>");
+    res.status(400).send("Oops! Please enter an email and password :) <a href='/urls/'>Register</a>");
   } else if (getUserByEmail(req.body.email, users)) {
     res.send("Hey! We're already friends, just log in! :)");
   } else {
@@ -83,7 +83,7 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = { urls: userURLs(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (templateVars.user === undefined) {
-    res.redirect("/login");
+    res.status(403).send("Well this is embarassing, I have a bad memory... Could you please <a href='/login'>log in</a>?");
   } else {
     res.render("urls_index", templateVars);
   }
@@ -94,6 +94,8 @@ app.get("/urls/new", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
   if (templateVars.user === undefined) {
     res.redirect("/login");
+  // } else if (req.params.longURL === undefined) {
+  //   res.status(403).send("That can't get any tinier! Please enter a URL!");
   } else {
     res.render("urls_new", templateVars);
   }
