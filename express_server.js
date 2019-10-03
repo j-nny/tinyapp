@@ -140,7 +140,11 @@ app.get("/hello", (req, res) => {
 //renders page showing user's URLs
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.session.user_id] };
+  if (templateVars.user === undefined) {
+    res.redirect("/login")
+  } else {
   res.render("urls_show", templateVars);
+  }
 });
 
 // adds new short URL to database
