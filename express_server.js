@@ -19,7 +19,7 @@ app.use(cookieSession({
 // used to keep track of all the URLs and their shortened forms
 const urlDatabase = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "blank" },
-  "9sm5xK": { longURL: "http://www.google.com", userID: "blank" }
+  "icon": { longURL: "https://i.pinimg.com/originals/b9/3f/80/b93f8070c4178d1906198e264cb4c98f.png", userID: "blank" }
 };
 
 //global variable, used to store and access users in the app

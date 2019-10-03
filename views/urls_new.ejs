@@ -3,27 +3,34 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale-1, shrink-to-fit-no">
+    <link rel="shortcut icon" href="https://i.pinimg.com/originals/b9/3f/80/b93f8070c4178d1906198e264cb4c98f.png"/>
 
     <!-- Bootstrap CSS -->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <title>New URL - TinyApp Example</title>
+    <title>TinyApp · New URL</title>
 
   </head>
 
   <body>
     <header><% include ./partials/_header %></header>
 
-    <main style="margin: 1em;">
-      <h3>Create TinyURL</h3>
-      <form class="form-inline" action="/urls" method="POST">
-        <div class="form-group mb-2">
-          <label for="longURL">Enter a URL:</label>
-          <input class="form-control" type="text" name="longURL" placeholder="http://" style="width:300px; margin: 1em">
-          <button class="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </form>
-    </main>
+      <div class="card text-center">
+        <div class="card-body">
+        <h3 class="card-title">Create TinyURL</h3>
+      </div>
+      
+      <div class="card-footer text-muted">
+        <form class="form-inline d-flex justify-content-center" action="/urls" method="POST">
+          <div class="form-group mb-2">
+            <label for="longURL"><h3>Enter a URL:</h3></label>
+            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width:300px; margin: 1em">
+            <button type="submit" class="btn btn-outline-secondary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

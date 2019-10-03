@@ -4,27 +4,34 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale-1, shrink-to-fit-no">
+    <link rel="shortcut icon" href="https://i.pinimg.com/originals/b9/3f/80/b93f8070c4178d1906198e264cb4c98f.png"/>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <title>Registration</title>
+    <title>TinyApp · Registration</title>
 
   </head>
   <body>
     <header><% include ./partials/_header %></header>
 
     <main style="margin: 1em;">
-      <h3>Create a new account</h3>
-      <form action="/register" method="POST"> 
-        <div style="margin-top:1em">
-          <h5 class="input-title">Email:</h5>
-          <input name="email" type="email" placeholder="Email" style="width:400px">
-          <h5 class="input-password">Password:</h5>
-          <input name="password" type="password" placeholder="Password" style="width:400px">
+        <div class="d-flex justify-content-center">
+        <form action="/login" method="POST"> 
+          <h3>Create a new account</h3>
+          <div style="margin-top:1em" class="form-group">
+            <h5 class="input-title">Email:</h5>
+            <input name="email" type="email" placeholder="Email" style="width:400px">
+          </div>
+          <div style="margin-top:1em" class="form-group">
+            <h5 class="input-password">Password:</h5>
+            <input name="password" type="password" placeholder="Password" style="width:400px">
+          </div>
+          <div style="margin-top:1em" class="form-group">
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+          </div>
+        </form>
         </div>
-        <button type="submit" class="btn btn-outline-primary" style="margin:1em">Submit</button>
-      </form>
-    </main>
+      </main>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
