@@ -125,7 +125,6 @@ app.get("/urls/:shortURL", (req, res) => {
       longURL: urlDatabase[req.params.shortURL].longURL,
       user: users[req.session.user_id],
       timestamp: urlDatabase[req.params.shortURL].timestamp, 
-      // copy: copy('localhost:8080/u/<%= shortURL %>')
     };
     res.render("urls_show", templateVars);
   }
