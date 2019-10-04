@@ -120,7 +120,12 @@ app.get("/urls/:shortURL", (req, res) => {
   } else if (users[req.session.user_id].id !== urlDatabase[req.params.shortURL].userID) {
     res.status(403).send("Looks like this page isn't for you, but you can have <a href='/urls/new'>your own TinyURL</a> ;)");
   } else {
-    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user:users[req.session.user_id] };
+    let templateVars = { 
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+      user: users[req.session.user_id],
+      timestamp: urlDatabase[req.params.shortURL].timestamp
+    };
     res.render("urls_show", templateVars);
   }
 });
@@ -129,7 +134,7 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
   let newShortURL = generateID();
-  urlDatabase[newShortURL] = { longURL: req.body.longURL, userID: templateVars.user.id, timestamp: Date(Date.now()).toString()};
+  urlDatabase[newShortURL] = { longURL: req.body.longURL, userID: templateVars.user.id, timestamp: Date(Date.now()).toLocaleString()};
   console.log(urlDatabase);
   res.redirect(`/urls/${newShortURL}`);
 });
