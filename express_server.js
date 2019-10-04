@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 const methodOverride = require("method-override");
 // helper functions:
-const { generateID, getUserByEmail, userURLs } = require("./helpers.js");
+const { generateID, getUserByEmail, userURLs, copy } = require("./helpers.js");
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -124,7 +124,8 @@ app.get("/urls/:shortURL", (req, res) => {
       shortURL: req.params.shortURL,
       longURL: urlDatabase[req.params.shortURL].longURL,
       user: users[req.session.user_id],
-      timestamp: urlDatabase[req.params.shortURL].timestamp
+      timestamp: urlDatabase[req.params.shortURL].timestamp, 
+      // copy: copy('localhost:8080/u/<%= shortURL %>')
     };
     res.render("urls_show", templateVars);
   }

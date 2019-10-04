@@ -27,8 +27,15 @@ let userURLs = function(user, urlDatabase) {
   return userDatabase;
 };
 
+// let copy = function() {
+//   const copyText = document.getElementById("myInput")
+//   copyText.select()
+//   document.execCommand("Copy");
+// }
+
 module.exports = {
   generateID,
   getUserByEmail,
-  userURLs
+  userURLs,
+  // copy
 };
