@@ -17,6 +17,8 @@
       <div class="card-body" >
         <h3 class="card-title">Tiny URL for <%= longURL %></h3>
         <p class="card-text">Short URL: <a class="text-success" href="/u/<%= shortURL %>"><%= shortURL %></a></p>
+
+        <!-- Click to copy function -->
         <form class="form-inline d-flex justify-content-center">
           <div class="form-group mb-2">
             <input type="text" class="form-control" style="width:300px; margin:1em" value="localhost:8080/u/<%= shortURL %>" id="myInput" text-align="center">
@@ -30,9 +32,11 @@
             <button class="btn btn-outline-success" value="localhost:8080/u/<%= shortURL %>" onclick="copy(value)">Click to Copy TinyURL</button>
           </div>
         </form>
+        <!-- Timestamp for when the TinyURL was created -->
         <p class="card-text text-muted" style="font-size:85%">This TinyURL was created: <%= timestamp %></p>
       </div>
 
+      <!-- Edit the TinyURL -->
       <div class="card-footer text-muted">
         <form class="form-inline d-flex justify-content-center" action="/urls/<%= shortURL %>" method="POST">
           <div class="form-group mb-2">

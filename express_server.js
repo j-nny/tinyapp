@@ -32,7 +32,7 @@ app.post("/register", function(req, res) {
     // errors if fields are empty
     res.status(400).send("Oops! Please enter an email and password :) <a href='/urls/'>Register</a>");
   } else if (getUserByEmail(req.body.email, users)) {
-    res.send("Hey! We're already friends, just <a href='/login'>log in! :)</a>");
+    res.send("Hey! We're already friends, just <a href='/login'>log in!</a> :)");
   } else {
     users[newUserID] = {id: newUserID, email: req.body.email, password: bcrypt.hashSync(req.body.password, 10)};
     req.session.user_id = newUserID;
