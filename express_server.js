@@ -4,6 +4,7 @@ const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
+const methodOverride = require("method-override");
 // helper functions:
 const { generateID, getUserByEmail, userURLs } = require("./helpers.js");
 
@@ -13,6 +14,7 @@ app.use(cookieSession({
   name: "session",
   keys: ["user_id"]
 }));
+app.use(methodOverride('_method'));
 
 // used to keep track of all the URLs and their shortened forms
 const urlDatabase = {
@@ -127,7 +129,8 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase, user:users[req.session.user_id] };
   let newShortURL = generateID();
-  urlDatabase[newShortURL] = { longURL: req.body.longURL, userID: templateVars.user.id};
+  urlDatabase[newShortURL] = { longURL: req.body.longURL, userID: templateVars.user.id, timestamp: Date(Date.now()).toString()};
+  console.log(urlDatabase);
   res.redirect(`/urls/${newShortURL}`);
 });
 
