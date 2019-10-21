@@ -2,9 +2,12 @@
 let generateID = function() {
   let randomString = "";
   for (let i = 0; i < 6; i++) {
-    const alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    randomString += alphaNum[Math.floor(Math.random() * Math.floor(alphaNum.length))];
-  } return randomString;
+    const alphaNum =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    randomString +=
+      alphaNum[Math.floor(Math.random() * Math.floor(alphaNum.length))];
+  }
+  return randomString;
 };
 
 // checks if the user is present in the database
@@ -18,10 +21,10 @@ let getUserByEmail = function(email, users) {
 
 // filters the URLs for only that user
 let userURLs = function(user, urlDatabase) {
-  let userDatabase = { };
+  let userDatabase = {};
   for (let url in urlDatabase) {
     if (urlDatabase[url].userID === user) {
-      userDatabase[url] = {longURL: urlDatabase[url].longURL, userID: user};
+      userDatabase[url] = { longURL: urlDatabase[url].longURL, userID: user };
     }
   }
   return userDatabase;
