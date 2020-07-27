@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ./partials/_head %>
+  <title>Shrink It!</title>
+</head>
+
+<body>
+  <div class="container">
+    <% include partials/_header %>
+    <% if (statusCode === '403') { %>
+    <div class="alert alert-warning" role="alert">
+      That resource is not available. Escape to <a href="/urls" class="alert-link">home.</a>
+    </div>
+    <% } else if (statusCode === '400') { %>
+    <div class="alert alert-danger" role="alert">
+      Some credentials were not right. <a href="/urls" class="alert-link">Please try again.</a>
+    </div>
+    <% } else if (statusCode === '404') { %>
+    <div class="alert alert-info" role="alert">
+      Hmmm I could not find that file here <a href="/urls" class="alert-link">Here, I will point you to the
+        homepage.</a>
+    </div>
+    <% } else if (statusCode === '409') { %>
+    <div class="alert alert-info" role="alert">
+      User exists please <a href="/login" class="alert-link">login</a>
+    </div>
+    <% } else if (statusCode === '406') { %>
+    <div class="alert alert-warning" role="alert">
+      Please fill all the fields <a href="/urls" class="alert-link">Try again.</a>
+    </div>
+    <% } else { %>
+    <div class="alert alert-info" role="alert">
+      Something got broken; <a href="/urls" class="alert-link">Escape to the homepage!</a>
+    </div>
+    <% } %>
+  </div>
+</body>
+
+</html>
